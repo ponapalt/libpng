@@ -1,8 +1,8 @@
 
 /* pngtest.c - a simple test program to test libpng
  *
- * Last changed in libpng 1.6.26 [October 20, 2016]
- * Copyright (c) 1998-2002,2004,2006-2016 Glenn Randers-Pehrson
+ * Last changed in libpng 1.6.32 [(PENDING RELEASE)]
+ * Copyright (c) 1998-2002,2004,2006-2017 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
  *
@@ -1195,9 +1195,14 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 #ifdef PNG_eXIf_SUPPORTED
    {
       png_bytep exif;
+      png_uint_32 exif_length;
 
-      if (png_get_eXIf(read_ptr, read_info_ptr, &exif) != 0)
-         png_set_eXIf(write_ptr, write_info_ptr, exif);
+      if (png_get_eXIf_1(read_ptr, read_info_ptr, &exif_length, &exif) != 0)
+      {
+         printf(" eXIf type %c%c, %d bytes\n",exif[0],exif[1],
+            (int)exif_length);
+         png_set_eXIf_1(write_ptr, write_info_ptr, exif_length, exif);
+      }
    }
 #endif
 #ifdef PNG_hIST_SUPPORTED
@@ -1406,6 +1411,10 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 
    write_chunks(write_ptr, before_IDAT); /* after PLTE */
 
+   png_write_info(write_ptr, write_end_info_ptr);
+
+   write_chunks(write_ptr, after_IDAT); /* after IDAT */
+
 #ifdef PNG_COMPRESSION_COMPAT
    /* Test the 'compatibility' setting here, if it is available. */
    png_set_compression(write_ptr, PNG_COMPRESSION_COMPAT);
@@ -1541,9 +1550,14 @@ test_one_file(PNG_CONST char *inname, PNG_CONST char *outname)
 #ifdef PNG_eXIf_SUPPORTED
    {
       png_bytep exif;
+      png_uint_32 exif_length;
 
-      if (png_get_eXIf(read_ptr, end_info_ptr, &exif) != 0)
-         png_set_eXIf(write_ptr, write_end_info_ptr, exif);
+      if (png_get_eXIf_1(read_ptr, end_info_ptr, &exif_length, &exif) != 0)
+      {
+         printf(" eXIf type %c%c, %d bytes\n",exif[0],exif[1],
+            (int)exif_length);
+         png_set_eXIf_1(write_ptr, write_end_info_ptr, exif_length, exif);
+      }
    }
 #endif
 #ifdef PNG_tIME_SUPPORTED
@@ -2104,4 +2118,4 @@ main(void)
 #endif
 
 /* Generate a compiler error if there is an old png.h in the search path. */
-typedef png_libpng_version_1_6_31rc02 Your_png_h_is_not_version_1_6_31rc02;
+typedef png_libpng_version_1_6_32beta03 Your_png_h_is_not_version_1_6_32beta03;

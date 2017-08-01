@@ -1,7 +1,7 @@
 
 /* pngrutil.c - utilities to read a PNG file
  *
- * Last changed in libpng 1.6.31 [(PENDING RELEASE)]
+ * Last changed in libpng 1.6.32 [(PENDING RELEASE)]
  * Copyright (c) 1998-2002,2004,2006-2017 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -2021,7 +2021,7 @@ png_handle_eXIf(png_structrp png_ptr, png_inforp info_ptr, png_uint_32 length)
    if ((png_ptr->mode & PNG_HAVE_IHDR) == 0)
       png_chunk_error(png_ptr, "missing IHDR");
 
-   else if (info_ptr != NULL && (info_ptr->valid & PNG_INFO_eXIf) != 0)
+   else if (info_ptr == NULL || (info_ptr->valid & PNG_INFO_eXIf) != 0)
    {
       png_crc_finish(png_ptr, length);
       png_chunk_benign_error(png_ptr, "duplicate");
@@ -2039,11 +2039,14 @@ png_handle_eXIf(png_structrp png_ptr, png_inforp info_ptr, png_uint_32 length)
    }
 
    if (png_crc_finish(png_ptr, 0) != 0)
+   {
+      png_free(png_ptr, eXIf_buf);
       return;
+   }
 
-   info_ptr->num_exif = length;
+   png_set_eXIf_1(png_ptr, info_ptr, length, eXIf_buf);
 
-   png_set_eXIf(png_ptr, info_ptr, eXIf_buf);
+   png_free(png_ptr, eXIf_buf);
 }
 #endif
 

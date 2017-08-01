@@ -1,7 +1,7 @@
 /*-
  * pngstest.c
  *
- * Last changed in libpng 1.6.31 [(PENDING RELEASE)]
+ * Last changed in libpng 1.6.31 [July 27, 2017]
  * Copyright (c) 2013-2017 John Cunningham Bowler
  *
  * This code is released under the libpng license.
@@ -2610,9 +2610,9 @@ compare_two_images(Image *a, Image *b, int via_linear,
    const unsigned int b_sample = PNG_IMAGE_SAMPLE_SIZE(formatb);
    int alpha_added, alpha_removed;
    int bchannels;
-   int btoa[4];
    png_uint_32 y;
    Transform tr;
+   int btoa[4]={0,0,0,0};
 
    /* This should never happen: */
    if (width != b->image.width || height != b->image.height)

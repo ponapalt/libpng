@@ -1,7 +1,7 @@
 
 /* pngpriv.h - private declarations for use inside libpng
  *
- * Last changed in libpng 1.6.31 [(PENDING RELEASE)]
+ * Last changed in libpng 1.6.32 [(PENDING RELEASE)]
  * Copyright (c) 1998-2002,2004,2006-2017 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -1141,6 +1141,11 @@ PNG_INTERNAL_FUNCTION(void,png_write_cHRM_fixed,(png_structrp png_ptr,
 #ifdef PNG_WRITE_sRGB_SUPPORTED
 PNG_INTERNAL_FUNCTION(void,png_write_sRGB,(png_structrp png_ptr,
     int intent),PNG_EMPTY);
+#endif
+
+#ifdef PNG_WRITE_eXIf_SUPPORTED
+PNG_INTERNAL_FUNCTION(void,png_write_eXIf,(png_structrp png_ptr,
+    png_bytep exif, int num_exif),PNG_EMPTY);
 #endif
 
 #ifdef PNG_WRITE_iCCP_SUPPORTED
