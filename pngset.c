@@ -136,6 +136,15 @@ png_set_cHRM_XYZ(png_const_structrp png_ptr, png_inforp info_ptr, double red_X,
 
 #ifdef PNG_eXIf_SUPPORTED
 void PNGAPI
+png_set_eXIf(png_const_structrp png_ptr, png_inforp info_ptr,
+    const png_bytep eXIf_buf)
+{
+  png_warning(png_ptr, "png_set_eXIf does not work; use png_set_eXIf_1");
+  PNG_UNUSED(info_ptr)
+  PNG_UNUSED(eXIf_buf)
+}
+
+void PNGAPI
 png_set_eXIf_1(png_const_structrp png_ptr, png_inforp info_ptr,
     const png_uint_32 num_exif, const png_bytep eXIf_buf)
 {
@@ -146,7 +155,11 @@ png_set_eXIf_1(png_const_structrp png_ptr, png_inforp info_ptr,
    if (png_ptr == NULL || info_ptr == NULL)
       return;
 
-   png_free_data(png_ptr, info_ptr, PNG_FREE_EXIF, 0);
+   if (info_ptr->exif)
+   {
+      png_free(png_ptr, info_ptr->exif);
+      info_ptr->exif = NULL;
+   }
 
    info_ptr->num_exif = num_exif;
 
@@ -161,7 +174,7 @@ png_set_eXIf_1(png_const_structrp png_ptr, png_inforp info_ptr,
 
    info_ptr->free_me |= PNG_FREE_EXIF;
 
-   for (i = 0; i < (int) num_exif; i++)
+   for (i = 0; i < (int) info_ptr->num_exif; i++)
       info_ptr->exif[i] = eXIf_buf[i];
 
    info_ptr->valid |= PNG_INFO_eXIf;
@@ -1389,6 +1402,7 @@ png_set_keep_unknown_chunks(png_structrp png_ptr, int keep,
       static PNG_CONST png_byte chunks_to_ignore[] = {
          98,  75,  71,  68, '\0',  /* bKGD */
          99,  72,  82,  77, '\0',  /* cHRM */
+        101,  88,  73, 102, '\0',  /* eXIf */
         103,  65,  77,  65, '\0',  /* gAMA */
         104,  73,  83,  84, '\0',  /* hIST */
         105,  67,  67,  80, '\0',  /* iCCP */
