@@ -5,7 +5,7 @@
 // Use of this source code is governed by a BSD-style license that may
 // be found in the LICENSE file https://cs.chromium.org/chromium/src/LICENSE
 
-// Last changed in libpng 1.6.32 [August 24, 2017]
+// Last changed in libpng 1.6.33beta03 [September 5, 2017]
 
 // The modifications in 2017 by Glenn Randers-Pehrson include
 // 1. addition of a PNG_CLEANUP macro,
@@ -23,21 +23,6 @@
 #define PNG_INTERNAL
 #include "png.h"
 
-#define PNG_CLEANUP \
-    if(png_handler.png_ptr) \
-    { \
-      if (row_ptr && png_ptr) \
-        png_free(png_ptr, row_ptr); \
-      if (png_handler.end_info_ptr) \
-        png_destroy_read_struct(&png_handler.png_ptr, &png_handler.info_ptr,\
-          &png_handler.end_info_ptr); \
-      else if (png_handler.info_ptr) \
-        png_destroy_read_struct(&png_handler.png_ptr, &png_handler.info_ptr,\
-          nullptr); \
-      else \
-        png_destroy_read_struct(&png_handler.png_ptr, nullptr, nullptr); \
-     }
-
 struct BufState {
   const uint8_t* data;
   size_t bytes_left;
@@ -51,7 +36,14 @@ struct PngObjectHandler {
   BufState* buf_state = nullptr;
 
   ~PngObjectHandler() {
-    PNG_CLEANUP
+    if (row_ptr)
+      png_free(png_ptr, row_ptr);
+    if (end_info_ptr)
+      png_destroy_read_struct(&png_ptr, &info_ptr, &end_info_ptr);
+    else if (info_ptr) 
+      png_destroy_read_struct(&png_ptr, &info_ptr, nullptr);
+    else
+      png_destroy_read_struct(&png_ptr, nullptr, nullptr);
     delete buf_state;
   }
 };
@@ -71,6 +63,7 @@ static const int kPngHeaderSize = 8;
 // Entry point for LibFuzzer.
 // Roughly follows the libpng book example:
 // http://www.libpng.org/pub/png/book/chapter13.html
+
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   if (size < kPngHeaderSize) {
     return 0;
@@ -83,10 +76,34 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   }
 
   PngObjectHandler png_handler;
+  png_handler.png_ptr = nullptr;
+  png_handler.row_ptr = nullptr;
+  png_handler.info_ptr = nullptr;
+  png_handler.end_info_ptr = nullptr;
+
   png_handler.png_ptr = png_create_read_struct
     (PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
   if (!png_handler.png_ptr) {
     return 0;
+  }
+
+#define PNG_CLEANUP \
+  if(png_handler.png_ptr) \
+  { \
+    if (png_handler.row_ptr) \
+      png_free(png_handler.png_ptr, png_handler.row_ptr); \
+    if (png_handler.end_info_ptr) \
+      png_destroy_read_struct(&png_handler.png_ptr, &png_handler.info_ptr,\
+        &png_handler.end_info_ptr); \
+    else if (png_handler.info_ptr) \
+      png_destroy_read_struct(&png_handler.png_ptr, &png_handler.info_ptr,\
+        nullptr); \
+    else \
+      png_destroy_read_struct(&png_handler.png_ptr, nullptr, nullptr); \
+    png_handler.png_ptr = nullptr; \
+    png_handler.row_ptr = nullptr; \
+    png_handler.info_ptr = nullptr; \
+    png_handler.end_info_ptr = nullptr; \
   }
 
   png_handler.info_ptr = png_create_info_struct(png_handler.png_ptr);
@@ -96,12 +113,13 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
   }
 
   png_handler.end_info_ptr = png_create_info_struct(png_handler.png_ptr);
-  if (!png_handler.info_ptr) {
+  if (!png_handler.end_info_ptr) {
     PNG_CLEANUP
     return 0;
   }
 
   png_set_crc_action(png_handler.png_ptr, PNG_CRC_QUIET_USE, PNG_CRC_QUIET_USE);
+
 #ifdef PNG_IGNORE_ADLER32
   png_set_option(png_handler.png_ptr, PNG_IGNORE_ADLER32, PNG_OPTION_ON);
 #endif
