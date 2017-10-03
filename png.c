@@ -1,7 +1,7 @@
 
 /* png.c - location for general purpose libpng functions
  *
- * Last changed in libpng 1.6.33 [(PENDING RELEASE)]
+ * Last changed in libpng 1.6.33 [September 28, 2017]
  * Copyright (c) 1998-2002,2004,2006-2017 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -14,7 +14,7 @@
 #include "pngpriv.h"
 
 /* Generate a compiler error if there is an old png.h in the search path. */
-typedef png_libpng_version_1_6_33beta04 Your_png_h_is_not_version_1_6_33beta04;
+typedef png_libpng_version_1_6_35beta01 Your_png_h_is_not_version_1_6_35beta01;
 
 #ifdef __GNUC__
 /* The version tests may need to be added to, but the problem warning has
@@ -816,14 +816,14 @@ png_get_copyright(png_const_structrp png_ptr)
 #else
 #  ifdef __STDC__
    return PNG_STRING_NEWLINE \
-      "libpng version 1.6.33beta04 - September 17, 2017" PNG_STRING_NEWLINE \
+      "libpng version 1.6.35beta01 - September 29, 2017" PNG_STRING_NEWLINE \
       "Copyright (c) 1998-2002,2004,2006-2017 Glenn Randers-Pehrson" \
       PNG_STRING_NEWLINE \
       "Copyright (c) 1996-1997 Andreas Dilger" PNG_STRING_NEWLINE \
       "Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc." \
       PNG_STRING_NEWLINE;
 #  else
-   return "libpng version 1.6.33beta04 - September 17, 2017\
+   return "libpng version 1.6.35beta01 - September 29, 2017\
       Copyright (c) 1998-2002,2004,2006-2017 Glenn Randers-Pehrson\
       Copyright (c) 1996-1997 Andreas Dilger\
       Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.";
@@ -1979,7 +1979,6 @@ icc_check_length(png_const_structrp png_ptr, png_colorspacerp colorspace,
    if (profile_length < 132)
       return png_icc_profile_error(png_ptr, colorspace, name, profile_length,
           "too short");
-
    return 1;
 }
 
@@ -2214,13 +2213,9 @@ png_icc_check_tag_table(png_const_structrp png_ptr, png_colorspacerp colorspace,
     */
    for (itag=0; itag < tag_count; ++itag, tag += 12)
    {
-      png_uint_32 tag_id = 0;
-      png_uint_32 tag_length = 0;
-      png_uint_32 tag_start = 0;
-
-      tag_id = png_get_uint_32(tag+0);
-      tag_length = png_get_uint_32(tag+8);/* not padded */
-      tag_start = png_get_uint_32(tag+4); /* must be aligned */
+      png_uint_32 tag_id = png_get_uint_32(tag+0);
+      png_uint_32 tag_start = png_get_uint_32(tag+4); /* must be aligned */
+      png_uint_32 tag_length = png_get_uint_32(tag+8);/* not padded */
 
       /* The ICC specification does not exclude zero length tags, therefore the
        * start might actually be anywhere if there is no data, but this would be
@@ -2238,7 +2233,7 @@ png_icc_check_tag_table(png_const_structrp png_ptr, png_colorspacerp colorspace,
 
       if ((tag_start & 3) != 0)
       {
-         /* CNHP730S.icc shipped with Microsoft Windows 64 violates this, it is
+         /* CNHP730S.icc shipped with Microsoft Windows 64 violates this; it is
           * only a warning here because libpng does not care about the
           * alignment.
           */
@@ -3766,7 +3761,7 @@ png_log16bit(png_uint_32 x)
  * of getting this accuracy in practice.
  *
  * To deal with this the following exp() function works out the exponent of the
- * frational part of the logarithm by using an accurate 32-bit value from the
+ * fractional part of the logarithm by using an accurate 32-bit value from the
  * top four fractional bits then multiplying in the remaining bits.
  */
 static const png_uint_32
