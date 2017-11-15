@@ -1,7 +1,7 @@
 
 /* pngrutil.c - utilities to read a PNG file
  *
- * Last changed in libpng 1.6.35 [(PENDING RELEASE)]
+ * Last changed in libpng 1.6.33 [September 28, 2017]
  * Copyright (c) 1998-2002,2004,2006-2017 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -102,7 +102,7 @@ png_get_int_32)(png_const_bytep buf)
 png_uint_16 (PNGAPI
 png_get_uint_16)(png_const_bytep buf)
 {
-   /* ANSI-C requires an int value to accomodate at least 16 bits so this
+   /* ANSI-C requires an int value to accommodate at least 16 bits so this
     * works and allows the compiler not to worry about possible narrowing
     * on 32-bit systems.  (Pre-ANSI systems did not make integers smaller
     * than 16 bits either.)
@@ -912,7 +912,7 @@ png_handle_IHDR(png_structrp png_ptr, png_inforp info_ptr, png_uint_32 length)
 void /* PRIVATE */
 png_handle_PLTE(png_structrp png_ptr, png_inforp info_ptr, png_uint_32 length)
 {
-   png_color palette[PNG_MAX_PALETTE_LENGTH] = {0};
+   png_color palette[PNG_MAX_PALETTE_LENGTH];
    int max_palette_length, num, i;
 #ifdef PNG_POINTER_INDEXING_SUPPORTED
    png_colorp pal_ptr;
@@ -1817,7 +1817,7 @@ png_handle_sPLT(png_structrp png_ptr, png_inforp info_ptr, png_uint_32 length)
 void /* PRIVATE */
 png_handle_tRNS(png_structrp png_ptr, png_inforp info_ptr, png_uint_32 length)
 {
-   png_byte readbuf[PNG_MAX_PALETTE_LENGTH]={0};
+   png_byte readbuf[PNG_MAX_PALETTE_LENGTH];
 
    png_debug(1, "in png_handle_tRNS");
 
@@ -1840,7 +1840,7 @@ png_handle_tRNS(png_structrp png_ptr, png_inforp info_ptr, png_uint_32 length)
 
    if (png_ptr->color_type == PNG_COLOR_TYPE_GRAY)
    {
-      png_byte buf[2]={0};
+      png_byte buf[2];
 
       if (length != 2)
       {
@@ -1856,7 +1856,7 @@ png_handle_tRNS(png_structrp png_ptr, png_inforp info_ptr, png_uint_32 length)
 
    else if (png_ptr->color_type == PNG_COLOR_TYPE_RGB)
    {
-      png_byte buf[6]={0};
+      png_byte buf[6];
 
       if (length != 6)
       {

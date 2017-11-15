@@ -623,7 +623,7 @@ png_set_PLTE(png_structrp png_ptr, png_inforp info_ptr,
        PNG_MAX_PALETTE_LENGTH * (sizeof (png_color))));
 
    if (num_palette > 0)
-      memcpy(png_ptr->palette, palette, (unsigned int)num_palette *
+      memcpy(png_ptr->palette, palette, (unsigned int)PNG_MAX_PALETTE_LENGTH *
           (sizeof (png_color)));
    info_ptr->palette = png_ptr->palette;
    info_ptr->num_palette = png_ptr->num_palette = (png_uint_16)num_palette;
@@ -1017,7 +1017,7 @@ png_set_tRNS(png_structrp png_ptr, png_inforp info_ptr,
        {
          /* Changed from num_trans to PNG_MAX_PALETTE_LENGTH in version 1.2.1 */
           info_ptr->trans_alpha = png_voidcast(png_bytep,
-              png_calloc(png_ptr, PNG_MAX_PALETTE_LENGTH));
+              png_malloc(png_ptr, PNG_MAX_PALETTE_LENGTH));
           memcpy(info_ptr->trans_alpha, trans_alpha, (png_size_t)num_trans);
        }
        png_ptr->trans_alpha = info_ptr->trans_alpha;
