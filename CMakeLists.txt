@@ -1,6 +1,6 @@
 # CMakeLists.txt
 
-# Copyright (C) 2007,2009-2017 Glenn Randers-Pehrson
+# Copyright (C) 2007,2009-2018 Glenn Randers-Pehrson
 # Written by Christian Ehrlicher, 2007
 # Revised by Roger Lowman, 2009-2010
 # Revised by Clifford Yapp, 2011-2012
@@ -97,7 +97,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" OR
   if(index EQUAL -1)
     message(FATAL_ERROR
       " PNG_ARM_NEON must be one of [${PNG_ARM_NEON_POSSIBLE_VALUES}]")
-  elseif(NOT ${PNG_ARM_NEON} STREQUAL "no")
+  elseif(NOT ${PNG_ARM_NEON} STREQUAL "off")
     set(libpng_arm_sources
       arm/arm_init.c
       arm/filter_neon.S
@@ -125,7 +125,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "^powerpc*" OR
   if(index EQUAL -1)
     message(FATAL_ERROR
       " PNG_POWERPC_VSX must be one of [${PNG_POWERPC_VSX_POSSIBLE_VALUES}]")
-  elseif(NOT ${PNG_POWERPC_VSX} STREQUAL "no")
+  elseif(NOT ${PNG_POWERPC_VSX} STREQUAL "off")
     set(libpng_powerpc_sources
       powerpc/powerpc_init.c
       powerpc/filter_vsx_intrinsics.c)
@@ -149,7 +149,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "^i?86" OR
   if(index EQUAL -1)
     message(FATAL_ERROR
       " PNG_INTEL_SSE must be one of [${PNG_INTEL_SSE_POSSIBLE_VALUES}]")
-  elseif(NOT ${PNG_INTEL_SSE} STREQUAL "no")
+  elseif(NOT ${PNG_INTEL_SSE} STREQUAL "off")
     set(libpng_intel_sources
       intel/intel_init.c
       intel/filter_sse2_intrinsics.c)
@@ -173,7 +173,7 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "mipsel*" OR
   if(index EQUAL -1)
     message(FATAL_ERROR
       " PNG_MIPS_MSA must be one of [${PNG_MIPS_MSA_POSSIBLE_VALUES}]")
-  elseif(NOT ${PNG_MIPS_MSA} STREQUAL "no")
+  elseif(NOT ${PNG_MIPS_MSA} STREQUAL "off")
     set(libpng_mips_sources
       mips/mips_init.c
       mips/filter_msa_intrinsics.c)
@@ -183,6 +183,30 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "mipsel*" OR
   else()
     add_definitions(-DPNG_MIPS_MSA_OPT=0)
   endif()
+endif()
+else(PNG_HARDWARE_OPTIMIZATIONS)
+# set definitions and sources for arm
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^arm" OR
+	CMAKE_SYSTEM_PROCESSOR MATCHES "^aarch64")
+  add_definitions(-DPNG_ARM_NEON_OPT=0)
+endif()
+
+# set definitions and sources for powerpc
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^powerpc*" OR
+	CMAKE_SYSTEM_PROCESSOR MATCHES "^ppc64*" )
+  add_definitions(-DPNG_POWERPC_VSX_OPT=0)
+endif()
+
+# set definitions and sources for intel
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^i?86" OR
+	CMAKE_SYSTEM_PROCESSOR MATCHES "^x86_64*" )
+  add_definitions(-DPNG_INTEL_SSE_OPT=0)
+endif()
+
+# set definitions and sources for MIPS
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "mipsel*" OR
+	CMAKE_SYSTEM_PROCESSOR MATCHES "mips64el*" )
+  add_definitions(-DPNG_MIPS_MSA_OPT=0)
 endif()
 endif(PNG_HARDWARE_OPTIMIZATIONS)
 
@@ -844,7 +868,7 @@ endif(NOT WIN32 OR CYGWIN OR MINGW)
 # SET UP LINKS
 if(PNG_SHARED)
   set_target_properties(png PROPERTIES
-#   VERSION 16.${PNGLIB_RELEASE}.1.6.35beta02
+#   VERSION 16.${PNGLIB_RELEASE}.1.6.35
     VERSION 16.${PNGLIB_RELEASE}.0
     SOVERSION 16
     CLEAN_DIRECT_OUTPUT 1)
