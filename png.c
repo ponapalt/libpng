@@ -1,10 +1,10 @@
 
 /* png.c - location for general purpose libpng functions
  *
- * Last changed in libpng 1.6.35 [July 15, 2018]
+ * Copyright (c) 2018 Cosmin Truta
  * Copyright (c) 1998-2002,2004,2006-2018 Glenn Randers-Pehrson
- * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
- * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
+ * Copyright (c) 1996-1997 Andreas Dilger
+ * Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.
  *
  * This code is released under the libpng license.
  * For conditions of distribution and use, see the disclaimer
@@ -14,7 +14,7 @@
 #include "pngpriv.h"
 
 /* Generate a compiler error if there is an old png.h in the search path. */
-typedef png_libpng_version_1_6_35 Your_png_h_is_not_version_1_6_35;
+typedef png_libpng_version_1_6_36_git Your_png_h_is_not_version_1_6_36_git;
 
 #ifdef __GNUC__
 /* The version tests may need to be added to, but the problem warning has
@@ -814,20 +814,14 @@ png_get_copyright(png_const_structrp png_ptr)
 #ifdef PNG_STRING_COPYRIGHT
    return PNG_STRING_COPYRIGHT
 #else
-#  ifdef __STDC__
    return PNG_STRING_NEWLINE \
-      "libpng version 1.6.35 - July 15, 2018" PNG_STRING_NEWLINE \
+      "libpng version 1.6.36.git" PNG_STRING_NEWLINE \
+      "Copyright (c) 2018 Cosmin Truta" PNG_STRING_NEWLINE \
       "Copyright (c) 1998-2002,2004,2006-2018 Glenn Randers-Pehrson" \
       PNG_STRING_NEWLINE \
       "Copyright (c) 1996-1997 Andreas Dilger" PNG_STRING_NEWLINE \
       "Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc." \
       PNG_STRING_NEWLINE;
-#  else
-   return "libpng version 1.6.35 - July 15, 2018\
-      Copyright (c) 1998-2002,2004,2006-2018 Glenn Randers-Pehrson\
-      Copyright (c) 1996-1997 Andreas Dilger\
-      Copyright (c) 1995-1996 Guy Eric Schalnat, Group 42, Inc.";
-#  endif
 #endif
 }
 
