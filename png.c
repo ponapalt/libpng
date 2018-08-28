@@ -736,7 +736,7 @@ png_save_int_32(png_bytep buf, png_int_32 i)
 int PNGAPI
 png_convert_to_rfc1123_buffer(char out[29], png_const_timep ptime)
 {
-   static PNG_CONST char short_months[12][4] =
+   static const char short_months[12][4] =
         {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
@@ -1115,7 +1115,7 @@ png_colorspace_set_gamma(png_const_structrp png_ptr,
     png_colorspacerp colorspace, png_fixed_point gAMA)
 {
    /* Changed in libpng-1.5.4 to limit the values to ensure overflow can't
-    * occur.  Since the fixed point representation is asymetrical it is
+    * occur.  Since the fixed point representation is asymmetrical it is
     * possible for 1/gamma to overflow the limit of 21474 and this means the
     * gamma value must be at least 5/100000 and hence at most 20000.0.  For
     * safety the limits here are a little narrower.  The values are 0.00016 to
@@ -3970,18 +3970,18 @@ png_gamma_correct(png_structrp png_ptr, unsigned int value,
  */
 static void
 png_build_16bit_table(png_structrp png_ptr, png_uint_16pp *ptable,
-    PNG_CONST unsigned int shift, PNG_CONST png_fixed_point gamma_val)
+    unsigned int shift, png_fixed_point gamma_val)
 {
    /* Various values derived from 'shift': */
-   PNG_CONST unsigned int num = 1U << (8U - shift);
+   unsigned int num = 1U << (8U - shift);
 #ifdef PNG_FLOATING_ARITHMETIC_SUPPORTED
    /* CSE the division and work round wacky GCC warnings (see the comments
     * in png_gamma_8bit_correct for where these come from.)
     */
-   PNG_CONST double fmax = 1./(((png_int_32)1 << (16U - shift))-1);
+   const double fmax = 1./(((png_int_32)1 << (16U - shift))-1);
 #endif
-   PNG_CONST unsigned int max = (1U << (16U - shift))-1U;
-   PNG_CONST unsigned int max_by_2 = 1U << (15U-shift);
+   unsigned int max = (1U << (16U - shift))-1U;
+   unsigned int max_by_2 = 1U << (15U-shift);
    unsigned int i;
 
    png_uint_16pp table = *ptable =
@@ -4047,10 +4047,10 @@ png_build_16bit_table(png_structrp png_ptr, png_uint_16pp *ptable,
  */
 static void
 png_build_16to8_table(png_structrp png_ptr, png_uint_16pp *ptable,
-    PNG_CONST unsigned int shift, PNG_CONST png_fixed_point gamma_val)
+    unsigned int shift, png_fixed_point gamma_val)
 {
-   PNG_CONST unsigned int num = 1U << (8U - shift);
-   PNG_CONST unsigned int max = (1U << (16U - shift))-1U;
+   unsigned int num = 1U << (8U - shift);
+   unsigned int max = (1U << (16U - shift))-1U;
    unsigned int i;
    png_uint_32 last;
 
@@ -4115,7 +4115,7 @@ png_build_16to8_table(png_structrp png_ptr, png_uint_16pp *ptable,
  */
 static void
 png_build_8bit_table(png_structrp png_ptr, png_bytepp ptable,
-    PNG_CONST png_fixed_point gamma_val)
+    png_fixed_point gamma_val)
 {
    unsigned int i;
    png_bytep table = *ptable = (png_bytep)png_malloc(png_ptr, 256);

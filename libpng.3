@@ -353,7 +353,7 @@ libpng \- Portable Network Graphics (PNG) Reference Library 1.6.36.git
 
 \fBvoid png_set_eXIf (png_structp \fP\fIpng_ptr\fP\fB, png_infop \fP\fIinfo_ptr\fP\fB, png_bytep \fIexif\fP\fB);\fP
 
-\fBvoid png_set_eXIf_1 (png_structp \fP\fIpng_ptr\fP\fB, png_infop \fP\fIinfo_ptr\fP\fB, const png_uint_32 \fP\fInum_exif\fP\fB, png_bytep \fIexif\fP\fB);\fP
+\fBvoid png_set_eXIf_1 (png_structp \fP\fIpng_ptr\fP\fB, png_infop \fP\fIinfo_ptr\fP\fB, png_uint_32 \fP\fInum_exif\fP\fB, png_bytep \fIexif\fP\fB);\fP
 
 \fBvoid png_set_hIST (png_structp \fP\fIpng_ptr\fP\fB, png_infop \fP\fIinfo_ptr\fP\fB, png_uint_16p \fIhist\fP\fB);\fP
 
@@ -4571,7 +4571,7 @@ Flags containing additional information about the image are held in
 the 'flags' field of png_image.
 
   PNG_IMAGE_FLAG_COLORSPACE_NOT_sRGB == 0x01
-    This indicates the the RGB values of the in-memory bitmap do not
+    This indicates that the RGB values of the in-memory bitmap do not
     correspond to the red, green and blue end-points defined by sRGB.
 
   PNG_IMAGE_FLAG_FAST == 0x02
@@ -5389,7 +5389,7 @@ to png_bytepp, and in png_set_iCCP, from png_charp to png_const_bytep.
 There are changes of form in png.h, including new and changed macros to
 declare parts of the API.  Some API functions with arguments that are
 pointers to data not modified within the function have been corrected to
-declare these arguments with PNG_CONST.
+declare these arguments with const.
 
 Much of the internal use of C macros to control the library build has also
 changed and some of this is visible in the exported header files, in
