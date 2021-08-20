@@ -263,6 +263,10 @@
 #ifndef PNG_H
 #define PNG_H
 
+#ifdef _DEBUG
+#define PNG_DEBUG 1
+#endif
+
 /* This is not the place to learn how to use libpng. The file libpng-manual.txt
  * describes how to use libpng, and the file example.c summarizes it
  * with some code on which to build.  This file is useful for looking
