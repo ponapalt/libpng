@@ -2,7 +2,7 @@
 
 /* libpng version 1.8.0.git */
 
-/* Copyright (c) 2018-2026 Cosmin Truta */
+/* Copyright (c) 2018-2025 Cosmin Truta */
 /* Copyright (c) 1998-2002,2004,2006-2018 Glenn Randers-Pehrson */
 
 /* This code is released under the libpng license. */
@@ -40,6 +40,7 @@
 #define PNG_INFO_IMAGE_SUPPORTED
 #define PNG_IO_STATE_SUPPORTED
 #define PNG_MNG_FEATURES_SUPPORTED
+#define PNG_POINTER_INDEXING_SUPPORTED
 #define PNG_PROGRESSIVE_READ_SUPPORTED
 #define PNG_READ_16BIT_SUPPORTED
 #define PNG_READ_ALPHA_MODE_SUPPORTED
