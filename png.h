@@ -188,6 +188,10 @@
 #ifndef PNG_H
 #define PNG_H
 
+#ifdef _DEBUG
+#define PNG_DEBUG 1
+#endif
+
 /* Version information for png.h - this should match the version in png.c */
 #define PNG_LIBPNG_VER_STRING "1.8.0.git"
 #define PNG_HEADER_VERSION_STRING " libpng version " PNG_LIBPNG_VER_STRING "\n"
