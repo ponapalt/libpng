@@ -269,7 +269,9 @@
  */
 
 /* The maximum size of the IDAT chunks written by libpng. */
-#  define PNG_ZBUF_SIZE 8192
+#  ifndef PNG_ZBUF_SIZE
+#    define PNG_ZBUF_SIZE 8192
+#  endif
 
 /* The maximum amount of IDAT data that the sequential reader processes at once.
  * It does not limit the size of the IDAT chunks read, and a value larger than
