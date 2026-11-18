@@ -800,7 +800,9 @@
  * the effect of denial-of-service attacks that use large amounts of highly
  * compressible data.
  */
-#define PNG_INFLATE_BUF_SIZE 1024
+#ifndef PNG_INFLATE_BUF_SIZE
+#  define PNG_INFLATE_BUF_SIZE 1024
+#endif
 
 #include "pngstruct.h"
 #include "pnginfo.h"
